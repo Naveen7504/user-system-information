@@ -18,51 +18,106 @@
         <div class="row">
             <div class="card">
                 <h4><span>🌐</span> IP Address</h4>
-                <!-- <p id="ip-address"></p> -->
                 <div class="value" id="ip-address">Loading...</div>
-            </div>
+                <div class="vertical-gap"></div>
 
-            <div class="card">
                 <h4><span>🧠</span> Operating System</h4>
-                <!-- <p id="os-info"></p> -->
                 <div class="value" id="os-info">Loading...</div>
+                <div class="vertical-gap"></div>
 
-            </div>
-            <div class="card">
                 <h4><span>🧠</span> System Architecture</h4>
-                <!-- <p id="os-info"></p> -->
                 <div class="value" id="cpuarch-info">Loading...</div>
+                <div class="vertical-gap"></div>
 
+                <h4><span>🖥️</span> Device Info</h4>
+                <div class="value" id="device-info">
+                    <strong>Device Vendor:</strong>
+                    <div id="device-vendor"> Unknown</div>
+                    <hr>
+                    <strong>Device Model:</strong>
+                    <div id="device-model">Unknown</div>
+                    <hr>
+                    <strong>Device Type:</strong>
+                    <div id="device-type">Unknown</div>
+                </div>
             </div>
 
             <div class="card">
 
                 <h4><span>🌎</span> Browser Info</h4>
-                <!-- <p id="browser-info"></p> -->
                 <div class="value" id="browser-info">Loading...</div>
-            </div>
+                <div class="vertical-gap"></div>
 
-        </div>
-        <div class="row">
-            <div class="card">
+                <h4><span>🌎</span> Browser Engine</h4>
+                <div class="value" id="browser-engine">Unknown</div>
+                <div class="vertical-gap"></div>
+
                 <h4><span>🖥️</span> Screen Resolution</h4>
-                <!-- <p id="screen-info"></p> -->
                 <div class="value" id="screen-info">Loading...</div>
-                <!-- <small>*Resize the window to see updates</small> -->
-            </div>
-            <div class="card">
+                <div class="vertical-gap"></div>
+
                 <h4><span>🖥️</span> Window Size</h4>
-                <!-- <p id="screen-info"></p> -->
                 <div class="value" id="window-info">Loading...</div>
                 <small>*Resize the window to see updates</small>
             </div>
+            <div class="card">
+                <h4><span>📍</span> Location Information</h4>
+                <div class="value" id="location-api-info">
+                    <strong>Coordinates:</strong>
+                    <div id="location-coordinates">Unknown</div>
+                    <hr>
+                    <strong>Country:</strong>
+                    <div id="location-country"> Unknown</div>
+                    <hr>
+                    <!-- <strong>Country Code:</strong>
+                    <div id="location-country-code">Unknown</div>
+                    <hr> -->
+                    <!-- <strong>Region:</strong>
+                    <div id="location-region">Unknown</div>
+                    <hr> -->
+                    <strong>Region Name:</strong>
+                    <div id="location-region-name">Unknown</div>
+                    <hr>
+                    <strong>City:</strong>
+                    <div id="location-city">Unknown</div>
+                    <hr>
+                    <strong>District:</strong>
+                    <div id="location-district">Unknown</div>
+                    <hr>
+                    <strong>Zip:</strong>
+                    <div id="location-zip">Unknown</div>
+                    <hr>
+                    <strong>Time Zone:</strong>
+                    <div id="location-timezone">Unknown</div>
+                    <hr>
+                    <!-- <strong>Currency:</strong>
+                    <div id="location-currency">Unknown</div>
+                    <hr> -->
+                    <strong>ISP:</strong>
+                    <div id="location-isp">Unknown</div>
+                    <hr>
+                    <strong>AS:</strong>
+                    <div id="location-as">Unknown</div>
+                    <hr>
+                    <strong>AS Name:</strong>
+                    <div id="location-asname">Unknown</div>
+                    
+                </div>
+
+            </div>
+
         </div>
+
         <div class="row">
-            <div class="card full-width">
-                <h4><span>📍</span> Geolocation</h4>
-                <!-- <p id="geolocation"></p> -->
+            <div class="card">
+                <h4><span>📍</span> Geolocation with user permission</h4>
                 <div class="value" id="geolocation">Loading...</div>
                 <div id="map"></div>
+            </div>
+            <div class="card">
+                <h4><span>📍</span> Geolocation with IP</h4>
+                <div class="value" id="geolocation_ip">Loading...</div>
+                <div id="map_ip"></div>
             </div>
         </div>
 
