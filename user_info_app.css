@@ -10,7 +10,7 @@ body {
 .container {
     max-width: 1200px;
     margin: auto;
-    padding: 20px 20px;
+    padding: 15px 15px;
 }
 
 h1 {
@@ -26,6 +26,7 @@ h1 {
 h4 {
     margin: 0;
     margin-bottom: 5px;
+    font-size: 14px;
 }
 
 p {
@@ -40,12 +41,16 @@ p {
 }
 
 .value {
-    margin-top: 5px;
-    padding: 12px;
+    margin-top: 8px;
+    padding: 8px;
+    font-size: 14px;
     background: #f4f6f8;
     border-left: 5px solid #9face6;
     border-radius: 6px;
     font-family: monospace;
+}
+.value div{
+    display: inline;
 }
 
 .row {
@@ -63,12 +68,21 @@ p {
     background: #f4f6f8;
     border-radius: 10px;
 }
+.vertical-gap{
+    height: 14px;
+}
+.row-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 
 .card {
     flex: 1 1 18%;
+    min-width: 200px;
     background: white;
     border-radius: 10px;
-    padding: 20px;
+    padding: 16px;
     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease;
 }
@@ -78,14 +92,24 @@ p {
 }
 
 .card span {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .card.full-width {
     flex: 1 1 100%;
 }
+.card.half-width {
+    flex: 1 1 50%;
+}
 
 #map {
+    height: 300px;
+    margin-top: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+#map_ip {
     height: 300px;
     margin-top: 15px;
     border-radius: 8px;
@@ -116,4 +140,18 @@ pre {
     border-radius: 8px;
     margin-top: 15px;
     overflow-x: auto;
+}
+
+/* 2 cards per row on medium screens */
+@media (max-width: 768px) {
+    .card {
+        flex: 1 1 35%;
+    }
+}
+
+/* 1 card per row on small screens */
+@media (max-width: 480px) {
+    .card {
+        flex: 1 1 100%;
+    }
 }
