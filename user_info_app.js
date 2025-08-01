@@ -4,7 +4,7 @@ window.onload = async () => {
     detectUserAgent();
     await getIpAddress();
     await getGeolocation();
-    await getGeolocationFromAPI();
+    await getGeolocationFromAPI2();
 };
 
 window.onresize = updateWindowInfo;
@@ -89,149 +89,279 @@ async function getGeolocationFromAPI() {
     return null;
 }
 
-async function getIpAddress() {
-    try {
-        const res = await fetch("https://api.ipify.org?format=json");
-        const data = await res.json();
-        document.getElementById("ip-address").innerText = data.ip;
-    } catch (err) {
-        document.getElementById("ip-address").innerText = "Error fetching IP";
-    }
-
-}
-
-function getArchitectureInfo() {
-    const ua = navigator.userAgent.toLowerCase();
-    const platform = navigator.platform.toLowerCase();
-    let arch = 'Unknown';
-
-    // Detect 64-bit
-    if (ua.includes('x86_64') || ua.includes('win64') || ua.includes('amd64') || platform.includes('x86_64') || ua.includes('wow64')) {
-        arch = '64-bit';
-    }
-    // Detect 32-bit
-    else if (ua.includes('i386') || ua.includes('i686') || ua.includes('x86') || platform.includes('x86')) {
-        arch = '32-bit';
-    }
-    // Detect ARM (used in mobiles and some modern laptops)
-    else if (ua.includes('arm') || platform.includes('arm')) {
-        arch = 'ARM';
-    }
-
-    return arch;
-}
-
-function detectUserAgent() {
-    const userAgent = navigator.userAgent;
-    const parser = new UAParser();
-    const os = parser.getOS();
-    const browser = parser.getBrowser();
-    const browserEngine = parser.getEngine();
-    const device = parser.getDevice();
-    // do not confuse between cpuArchitecture and osArchitecutre
-    // These are approximate values calculated; exact values will not present in UA agent for security reasons.
-    const cpuArchitecture = parser.getCPU().architecture ? parser.getCPU().architecture : "Unknown";
-    const osArchitecture = getArchitectureInfo() ? getArchitectureInfo() : "Unknown";
-    let osdetails = `${os.name} ${os.version}`;
-    let browserDetails = `${browser.name} ${browser.version}`;
-    let architecture = `${cpuArchitecture} ${osArchitecture}`;
-    let parserResult = parser.getResult();
-    if (os.name === "Windows" && os.version === "10") {
-        osdetails = `Windows 10/11`;
-    }
-    if (!os.name) {
-        osdetails = "Unknown OS";
-    }
-    if (!browser.name) {
-        browserDetails = "Unknown";
-    }
-    if (!cpuArchitecture) {
-        architecture == "Unknown"
-    }
-    device.vendor = device.vendor || "Unknown";
-    device.model = device.model || "Unknown";
-    if (!device.type) { 
-        device.type = "Desktop/Computer";
-    }
-    browserEngine.name = browserEngine.name || "Unknown";
-    browserEngine.version = browserEngine.version || "Unknown";
-    // console.log(userAgent);
-    // console.log(parser.getResult());
-    document.getElementById("os-info").innerText = `${osdetails}`;
-    document.getElementById("browser-info").innerText = `${browserDetails}`;
-    document.getElementById("cpuarch-info").innerText = `${architecture}`;
-    document.getElementById("device-vendor").innerText = `${device.vendor}`;
-    document.getElementById("device-model").innerText = `${device.model}`;
-    document.getElementById("device-type").innerText = `${device.type}`;
-    document.getElementById("browser-engine").innerText = `${browserEngine.name} ${browserEngine.version}`;
-    // document.getElementById("device-info").innerHTML = `<strong>Device Vendor:</strong> ${device.vendor}<hr>
-    //  <strong>Device Model:</strong> ${device.model}<hr> 
-    //  <strong>Device Type:</strong> ${device.type}`;
-
-    // const myos = getOS();
-    // document.getElementById("os-info").innerText = myos;
-
-    // Store for raw data
-    window._rawData = {
-        userAgent: navigator.userAgent,
-        nvaigationParser: parserResult
-        // os: `${os.name} ${os.version}`,
-        // browser: `${browser.name} ${browser.version}`
-    };
-}
-
-// Load UAParser from CDN
-const script = document.createElement('script');
-script.src = 'https://cdnjs.cloudflare.com/ajax/libs/UAParser.js/1.0.2/ua-parser.min.js';
-script.onload = detectUserAgent;
-document.head.appendChild(script);
-
-function getGeolocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude.toFixed(5);
-                const lon = position.coords.longitude.toFixed(5);
-                document.getElementById("geolocation").innerText = `Latitude: ${lat}, Longitude: ${lon}`;
-                window._rawData = {
-                    ...window._rawData,
-                    location: { latitude: lat, longitude: lon }
-                };
-                renderMap(lat, lon);
-            },
-            () => {
-                document.getElementById("geolocation").innerText = "Permission denied or unavailable.";
+async function getGeolocationFromAPI2(){
+    const sampleData = {
+        "city": {
+            "name": "Bengaluru",
+            "names": {
+                "en": "Bengaluru"
             }
-        );
-    } else {
-        document.getElementById("geolocation").innerText = "Geolocation not supported.";
+        },
+        "continent": {
+            "code": "AS",
+            "geoname_id": 6255147,
+            "names": {
+                "de": "Asien",
+                "en": "Asia",
+                "es": "Asia",
+                "fa": " آسیا",
+                "fr": "Asie",
+                "ja": "アジア大陸",
+                "ko": "아시아",
+                "pt-BR": "Ásia",
+                "ru": "Азия",
+                "zh-CN": "亚洲"
+            },
+            "name": "Asia"
+        },
+        "country": {
+            "geoname_id": 1269750,
+            "iso_code": "IN",
+            "names": {
+                "de": "Indien",
+                "en": "India",
+                "es": "India",
+                "fa": "هند",
+                "fr": "Inde",
+                "ja": "インド",
+                "ko": "인도",
+                "pt-BR": "Índia",
+                "ru": "Индия",
+                "zh-CN": "印度"
+            },
+            "name": "India",
+            "name_native": "भारत",
+            "phone_code": "91",
+            "capital": "New Delhi",
+            "currency": "INR",
+            "flag": "🇮🇳",
+            "languages": [
+                {
+                    "iso_code": "hi",
+                    "name": "Hindi",
+                    "name_native": "हिन्दी"
+                },
+                {
+                    "iso_code": "en",
+                    "name": "English",
+                    "name_native": "English"
+                }
+            ]
+        },
+        "location": {
+            "latitude": 12.97194,
+            "longitude": 77.59369
+        },
+        "subdivisions": [
+            {
+                "names": {
+                    "en": "Karnataka"
+                }
+            }
+        ],
+        "state": {
+            "name": "Karnataka"
+        },
+        "datasource": [
+            {
+                "name": "IP to City Lite",
+                "attribution": "\u003Ca href='https://db-ip.com'\u003EIP Geolocation by DB-IP\u003C/a\u003E",
+                "license": "Creative Commons Attribution License"
+            }
+        ],
+        "ip": "2401:4900:4e7e:39c0:b13e:6df6:3602:e735"
+    };
+    try {
+        const res = await fetch("https://api.geoapify.com/v1/ipinfo?&apiKey=bed401ce54e04f2498cb930151611b30");
+        const locationData = await res.json();
+        console.log("api response", locationData);
+        window._rawData = {
+            ...window._rawData,
+            locationDataFromAPI: locationData
+        };
+        const lat = locationData.location.latitude.toFixed(5);
+        const lon = locationData.location.longitude.toFixed(5);
+        document.getElementById("geolocation_ip").innerText = `Latitude: ${lat}, Longitude: ${lon}`;
+        window._rawData = {
+            ...window._rawData,
+            location: { latitude: lat, longitude: lon }
+        };
+        renderMapIp(lat, lon);
+        let locationCountry = locationData.country.name || "Unknown";
+        let locationCountryCode = locationData.country.iso_code || "Unknown";
+        let locationRegion = locationData.state.name || "Unknown";
+        let locationRegionName = locationData.subdivisions[0].names.en || "Unknown";
+        document.getElementById("location-country").innerText = `${locationCountry} (${locationCountryCode})`;
+        document.getElementById("location-region-name").innerText = `${locationRegionName} (${locationRegion})`;
+        document.getElementById("location-city").innerText = locationData.city.name || "Unknown";
+        document.getElementById("location-zip").innerText = locationData.postcode || "Unknown";
+        document.getElementById("location-timezone").innerText = locationData.timezone || "Unknown";
+        document.getElementById("location-isp").innerText = locationData.isp || "Unknown";
+        document.getElementById("location-as").innerText = locationData.asn || "Unknown";
+        document.getElementById("location-asname").innerText = locationData.asn_name || "Unknown";
+        document.getElementById("location-coordinates").innerText = `Lat: ${lat}, Lon: ${lon}` || "Unknown";
+        // document.getElementById("location-district").innerText = locationData.district || "Unknown";
+        // document.getElementById("location-currency").innerText = location
+    }catch (err) {
+        console.error("Error fetching location data", err);
     }
-}
-
-function renderMap(lat, lon) {
-    console.log("Rendering map at", lat, lon);
-    const map = L.map('map').setView([lat, lon], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-    L.marker([lat, lon]).addTo(map).bindPopup("You are here!").openPopup();
-}
-
-function renderMapIp(lat, lon) {
-    console.log("Rendering map IP at", lat, lon);
-    const map = L.map('map_ip').setView([lat, lon], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-    L.marker([lat, lon]).addTo(map).bindPopup("You are here!").openPopup();
-}
-
-function toggleRawData() {
-    const rawDataEl = document.getElementById("raw-data");
-    if (rawDataEl.classList.contains("hidden")) {
-        rawDataEl.textContent = JSON.stringify(window._rawData, null, 2);
-        rawDataEl.classList.remove("hidden");
-    } else {
-        rawDataEl.classList.add("hidden");
+        try{
+        const res = await fetch("https://api.ipgeolocation.io/v2/ipgeo?apiKey=9a9e949e99944cd7b906c6852550c483");
+        const locationData = await res.json();
+        console.log("api response ipgeoloation", locationData);
+        const zipcode = locationData?.location?.zipcode || "Unknown";
+        const district = locationData?.location?.district || "Unknown";
+        document.getElementById("location-zip").innerText = zipcode;
+        document.getElementById("location-district").innerText = district;
+    }catch (err) {
+        console.error("Error fetching location data from ipgeolocation.io", err);
     }
+    return null;
 }
+
+async function getIpAddress() {
+        try {
+            const res = await fetch("https://api.ipify.org?format=json");
+            const data = await res.json();
+            document.getElementById("ip-address").innerText = data.ip;
+        } catch (err) {
+            document.getElementById("ip-address").innerText = "Error fetching IP";
+        }
+
+    }
+
+    function getArchitectureInfo() {
+        const ua = navigator.userAgent.toLowerCase();
+        const platform = navigator.platform.toLowerCase();
+        let arch = 'Unknown';
+
+        // Detect 64-bit
+        if (ua.includes('x86_64') || ua.includes('win64') || ua.includes('amd64') || platform.includes('x86_64') || ua.includes('wow64')) {
+            arch = '64-bit';
+        }
+        // Detect 32-bit
+        else if (ua.includes('i386') || ua.includes('i686') || ua.includes('x86') || platform.includes('x86')) {
+            arch = '32-bit';
+        }
+        // Detect ARM (used in mobiles and some modern laptops)
+        else if (ua.includes('arm') || platform.includes('arm')) {
+            arch = 'ARM';
+        }
+
+        return arch;
+    }
+
+    function detectUserAgent() {
+        const userAgent = navigator.userAgent;
+        const parser = new UAParser();
+        const os = parser.getOS();
+        const browser = parser.getBrowser();
+        const browserEngine = parser.getEngine();
+        const device = parser.getDevice();
+        // do not confuse between cpuArchitecture and osArchitecutre
+        // These are approximate values calculated; exact values will not present in UA agent for security reasons.
+        const cpuArchitecture = parser.getCPU().architecture ? parser.getCPU().architecture : "Unknown";
+        const osArchitecture = getArchitectureInfo() ? getArchitectureInfo() : "Unknown";
+        let osdetails = `${os.name} ${os.version}`;
+        let browserDetails = `${browser.name} ${browser.version}`;
+        let architecture = `${cpuArchitecture} ${osArchitecture}`;
+        let parserResult = parser.getResult();
+        if (os.name === "Windows" && os.version === "10") {
+            osdetails = `Windows 10/11`;
+        }
+        if (!os.name) {
+            osdetails = "Unknown OS";
+        }
+        if (!browser.name) {
+            browserDetails = "Unknown";
+        }
+        if (!cpuArchitecture) {
+            architecture == "Unknown"
+        }
+        device.vendor = device.vendor || "Unknown";
+        device.model = device.model || "Unknown";
+        if (!device.type) {
+            device.type = "Desktop/Computer";
+        }
+        browserEngine.name = browserEngine.name || "Unknown";
+        browserEngine.version = browserEngine.version || "Unknown";
+        // console.log(userAgent);
+        // console.log(parser.getResult());
+        document.getElementById("os-info").innerText = `${osdetails}`;
+        document.getElementById("browser-info").innerText = `${browserDetails}`;
+        document.getElementById("cpuarch-info").innerText = `${architecture}`;
+        document.getElementById("device-vendor").innerText = `${device.vendor}`;
+        document.getElementById("device-model").innerText = `${device.model}`;
+        document.getElementById("device-type").innerText = `${device.type}`;
+        document.getElementById("browser-engine").innerText = `${browserEngine.name} ${browserEngine.version}`;
+        // document.getElementById("device-info").innerHTML = `<strong>Device Vendor:</strong> ${device.vendor}<hr>
+        //  <strong>Device Model:</strong> ${device.model}<hr> 
+        //  <strong>Device Type:</strong> ${device.type}`;
+
+        // const myos = getOS();
+        // document.getElementById("os-info").innerText = myos;
+
+        // Store for raw data
+        window._rawData = {
+            userAgent: navigator.userAgent,
+            nvaigationParser: parserResult
+            // os: `${os.name} ${os.version}`,
+            // browser: `${browser.name} ${browser.version}`
+        };
+    }
+
+    // Load UAParser from CDN
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/UAParser.js/1.0.2/ua-parser.min.js';
+    script.onload = detectUserAgent;
+    document.head.appendChild(script);
+
+    function getGeolocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude.toFixed(5);
+                    const lon = position.coords.longitude.toFixed(5);
+                    document.getElementById("geolocation").innerText = `Latitude: ${lat}, Longitude: ${lon}`;
+                    window._rawData = {
+                        ...window._rawData,
+                        location: { latitude: lat, longitude: lon }
+                    };
+                    renderMap(lat, lon);
+                },
+                () => {
+                    document.getElementById("geolocation").innerText = "Permission denied or unavailable.";
+                }
+            );
+        } else {
+            document.getElementById("geolocation").innerText = "Geolocation not supported.";
+        }
+    }
+
+    function renderMap(lat, lon) {
+        console.log("Rendering map at", lat, lon);
+        const map = L.map('map').setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([lat, lon]).addTo(map).bindPopup("You are here!").openPopup();
+    }
+
+    function renderMapIp(lat, lon) {
+        console.log("Rendering map IP at", lat, lon);
+        const map = L.map('map_ip').setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([lat, lon]).addTo(map).bindPopup("You are here!").openPopup();
+    }
+
+    function toggleRawData() {
+        const rawDataEl = document.getElementById("raw-data");
+        if (rawDataEl.classList.contains("hidden")) {
+            rawDataEl.textContent = JSON.stringify(window._rawData, null, 2);
+            rawDataEl.classList.remove("hidden");
+        } else {
+            rawDataEl.classList.add("hidden");
+        }
+    }
